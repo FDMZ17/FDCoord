@@ -117,7 +117,7 @@ export default function Home() {
                                         ? <p className="text-emerald-300">Link in message:</p>
                                         : ''
                                 }
-                                <a className="text-sky-500 hover:text-sky-600" href={
+                                <a target="_blank" className="text-sky-500 hover:text-sky-600" href={
                                     e.message.match(urlRegex)
                                 }>{e.message.match(urlRegex)}</a>
                             </p>
