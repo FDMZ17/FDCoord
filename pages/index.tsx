@@ -9,6 +9,7 @@ const {
 const randomName = uniqueNamesGenerator({
     dictionaries: [starWars],
 });
+const urlRegex = /(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g
 
 fetch('http://localhost:3000/api/ws')
 const socket = io()
@@ -107,9 +108,18 @@ export default function Home() {
                             key={index}
                         >
                             <p>
-                                <strong>{e.from == nickname ? "You" : e.from}</strong>{" "}
-                                <br></br>
+                                <strong className="font-bold">{e.from == nickname ? "You" : e.from}</strong>{" "}
+                                <br />
                                 {e.message}
+                                <br />
+                                {
+                                    urlRegex.test(e.message)
+                                        ? <p className="text-emerald-300">Link in message:</p>
+                                        : ''
+                                }
+                                <a className="text-sky-500 hover:text-sky-600" href={
+                                    e.message.match(urlRegex)
+                                }>{e.message.match(urlRegex)}</a>
                             </p>
                         </div>
                     ))}
@@ -118,7 +128,7 @@ export default function Home() {
                 <div id="chatBar">
                     <form onSubmit={sendMessage}>
                         <div className="flex fixed right-1 bottom-1 rounded-lg">
-                            <input id="messageBox" type="text" className="flex outline-none border-none rounded-sm px-3 md:py-2 md:w-screen mb-2 w-[42vh] text-white bg-zinc-900" size={100}
+                            <input id="messageBox" type="text" autoComplete="off" className="flex outline-none border-none rounded-sm px-3 md:py-2 md:w-screen mb-2 w-[42vh] text-white bg-zinc-900" size={100}
                                 placeholder="Type a message"
                                 required
                                 value={inputText}
@@ -142,6 +152,11 @@ export default function Home() {
                         </div>
                     </form>
                 </div>
+                {/* noscript */}
+                <noscript
+                    className="flex fixed top-0 right-0 bottom-0 left-0 justify-center items-center w-screen h-screen text-3xl font-bold text-white bg-zinc-900">
+                    You need to enable JavaScript to run this app.
+                </noscript>
             </main>
         </>
     )
